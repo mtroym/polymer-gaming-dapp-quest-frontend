@@ -78,7 +78,7 @@ function NFT() {
 
     try {
       const contract = new ethers.Contract(
-        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
+        "0xbe398F67D7a7Dd10Dd62486Be32e996180a1449A",
         abi,
         signer
       );
@@ -107,7 +107,7 @@ function NFT() {
   const mint = async (variant: number) => {
     try {
       const contract = new ethers.Contract(
-        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
+        "0xbe398F67D7a7Dd10Dd62486Be32e996180a1449A",
         abi,
         signer
       );
@@ -133,13 +133,13 @@ function NFT() {
   const randomMint = async () => {
     try {
       const contract = new ethers.Contract(
-        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
+        "0xbe398F67D7a7Dd10Dd62486Be32e996180a1449A",
         abi,
         signer
       );
 
       if (signer) {
-        const tx = await contract.randomMint();
+        const tx = await contract.randomMint(signer.getAddress());
 
         await tx.wait();
         fetchMyNfts();
@@ -156,7 +156,7 @@ function NFT() {
   const burn = async (tokenId: number) => {
     try {
       const contract = new ethers.Contract(
-        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
+        "0xbe398F67D7a7Dd10Dd62486Be32e996180a1449A",
         abi,
         signer
       );

@@ -1,133 +1,14 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_middleware",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "ERC721IncorrectOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "ERC721InsufficientApproval",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "approver",
-        "type": "address"
-      }
-    ],
-    "name": "ERC721InvalidApprover",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "ERC721InvalidOperator",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "ERC721InvalidOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "receiver",
-        "type": "address"
-      }
-    ],
-    "name": "ERC721InvalidReceiver",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      }
-    ],
-    "name": "ERC721InvalidSender",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "ERC721NonexistentToken",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnableInvalidOwner",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "OwnableUnauthorizedAccount",
-    "type": "error"
   },
   {
     "anonymous": false,
@@ -183,6 +64,56 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "message",
+        "type": "string"
+      }
+    ],
+    "name": "MintAckReceived",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "voter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "voteId",
+        "type": "uint256"
+      }
+    ],
+    "name": "NFTAckReceived",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -225,59 +156,94 @@
   },
   {
     "inputs": [],
-    "name": "MAX_NFT_PER_USER",
+    "name": "acceptTokenAddress",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IERC20",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "PRICE_NFT1",
-    "outputs": [
+    "inputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PRICE_NFT2",
+    "name": "ackPackets",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "srcPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mwBitmap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "destPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes",
+            "name": "appData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UniversalPacket",
+        "name": "packet",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "success",
+            "type": "bool"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct AckPacket",
+        "name": "ack",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "PRICE_NFT3",
-    "outputs": [
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PRICE_NFT4",
+    "name": "addressOwnerTokens",
     "outputs": [
       {
         "internalType": "uint256",
@@ -310,6 +276,38 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "middleware",
+        "type": "address"
+      }
+    ],
+    "name": "authorizeMiddleware",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "authorizedMws",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "owner",
         "type": "address"
       }
@@ -328,14 +326,42 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "destPortAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint64",
+        "name": "timeoutSeconds",
+        "type": "uint64"
+      },
+      {
+        "internalType": "enum PolymerERC721UC.NFTType",
+        "name": "tokenType",
+        "type": "uint8"
+      }
+    ],
+    "name": "crossChainMint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "currentTokenId",
+    "outputs": [
+      {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "burn",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -358,14 +384,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getTokenVariant",
+    "inputs": [],
+    "name": "getTokenId",
     "outputs": [
       {
         "internalType": "uint256",
@@ -423,28 +443,41 @@
     "inputs": [],
     "name": "mintNFT1",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "mintNFT2",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "mintNFT3",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "mintNFT4",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mw",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -463,20 +496,156 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "srcPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mwBitmap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "destPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes",
+            "name": "appData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UniversalPacket",
+        "name": "packet",
+        "type": "tuple"
       }
     ],
-    "name": "nftCounts",
+    "name": "onRecvUniversalPacket",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "success",
+            "type": "bool"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct AckPacket",
+        "name": "ackPacket",
+        "type": "tuple"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "srcPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mwBitmap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "destPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes",
+            "name": "appData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UniversalPacket",
+        "name": "packet",
+        "type": "tuple"
+      }
+    ],
+    "name": "onTimeoutUniversalPacket",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "srcPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mwBitmap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "destPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes",
+            "name": "appData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UniversalPacket",
+        "name": "packet",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "success",
+            "type": "bool"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct AckPacket",
+        "name": "ack",
+        "type": "tuple"
+      }
+    ],
+    "name": "onUniversalAcknowledgement",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -506,6 +675,96 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "ptype",
+        "type": "uint256"
+      }
+    ],
+    "name": "purchaseMint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
+    ],
+    "name": "randomMint",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "randomizerPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "recvedPackets",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "srcPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mwBitmap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "destPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes",
+            "name": "appData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UniversalPacket",
+        "name": "packet",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -573,6 +832,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_erc20TokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setAcceptTokenAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "operator",
         "type": "address"
       },
@@ -583,6 +855,19 @@
       }
     ],
     "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_middleware",
+        "type": "address"
+      }
+    ],
+    "name": "setDefaultMw",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -623,6 +908,71 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "timeoutPackets",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "srcPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mwBitmap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "destPortAddr",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes",
+            "name": "appData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UniversalPacket",
+        "name": "packet",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "tokenTypeMap",
+    "outputs": [
+      {
+        "internalType": "enum PolymerERC721UC.NFTType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
       }
@@ -639,10 +989,42 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "tokenURIC4",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum PolymerERC721UC.NFTType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "tokenURIs",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
@@ -696,9 +1078,9 @@
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "enum PolymerERC721UC.NFTType",
         "name": "",
-        "type": "address"
+        "type": "uint8"
       },
       {
         "internalType": "uint256",
@@ -706,7 +1088,7 @@
         "type": "uint256"
       }
     ],
-    "name": "userOwnedTokens",
+    "name": "typeTokenMap",
     "outputs": [
       {
         "internalType": "uint256",
@@ -718,10 +1100,39 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "withdraw",
+    "inputs": [
+      {
+        "internalType": "enum PolymerERC721UC.NFTType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "typeTokenPriceMap",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_newTokenURI",
+        "type": "string"
+      }
+    ],
+    "name": "updateTokenURI",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]

@@ -38,11 +38,11 @@ function Points() {
     // init contract with the address of the deployed contract
     try {
       const contract = new ethers.Contract(
-        "0xE97994805b7a090d7D1222c2bd4C8D7e0799ef93",
+        "0xda9996d80EFdaE2C30B3036C47E2A5617F8BA8Ca",
         abi,
         signer
       );
-
+      // 0xda9996d80EFdaE2C30B3036C47E2A5617F8BA8Ca
       // listen to the event emitted by the contract
       contract.on("PointsAdded", (addr, randomNumber) => {
         if (addr === signer?.address) {
@@ -52,7 +52,7 @@ function Points() {
       });
 
       setIsRequesting(true);
-      const tx = await contract.requestPoints();
+      const tx = await contract.funMint();
       await tx.wait();
     } catch (e) {
       console.error(e);

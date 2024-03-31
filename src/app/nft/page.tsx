@@ -30,9 +30,6 @@ const refunds = [
 function NFT() {
   const account = useAccount();
   const signer = useEthersSigner();
-  // I have deployed a Dummy NFT Contract: 0x7Bd8afD53eDfedAa6417C635083DEf53c5a03825 on Optimism Sepolia
-  // https://sepolia-optimism.etherscan.io/address/0x7Bd8afD53eDfedAa6417C635083DEf53c5a03825#code
-
   const [section, setSection] = useState("purchase");
   const [loadingForVariant, setLoadingForVariant] = useState([
     false,
@@ -48,22 +45,22 @@ function NFT() {
     {
       variant: 1,
       name: "NFT 1",
-      price: "0.00025",
+      price: "1",
     },
     {
       variant: 2,
       name: "NFT 2",
-      price: "0.0005",
+      price: "0.1",
     },
     {
       variant: 3,
       name: "NFT 3",
-      price: "0.00075",
+      price: "0.1",
     },
     {
       variant: 4,
       name: "NFT 4",
-      price: "0.001",
+      price: "0.1",
     },
   ]);
 
@@ -81,7 +78,7 @@ function NFT() {
 
     try {
       const contract = new ethers.Contract(
-        "0x7Bd8afD53eDfedAa6417C635083DEf53c5a03825",
+        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
         abi,
         signer
       );
@@ -110,7 +107,7 @@ function NFT() {
   const mint = async (variant: number) => {
     try {
       const contract = new ethers.Contract(
-        "0x7Bd8afD53eDfedAa6417C635083DEf53c5a03825",
+        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
         abi,
         signer
       );
@@ -119,9 +116,7 @@ function NFT() {
         setLoadingForVariant((prev) => prev.map((_, i) => i === variant - 1));
 
         // mintNFT1, mintNFT2, mintNFT3, mintNFT4 are the available functions in the smart contract
-        const tx = await contract[`mintNFT${variant}`]({
-          value: ethers.parseEther(nfts[variant - 1].price),
-        });
+        const tx = await contract[`mintNFT${variant}`]();
 
         await tx.wait();
         fetchMyNfts();
@@ -135,11 +130,33 @@ function NFT() {
       setLoadingForVariant(newLoading);
     }
   };
+  const randomMint = async () => {
+    try {
+      const contract = new ethers.Contract(
+        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
+        abi,
+        signer
+      );
 
+      if (signer) {
+        const tx = await contract.randomMint();
+
+        await tx.wait();
+        fetchMyNfts();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      // reset loading state
+      // const newLoading = [...loadingForVariant];
+      // newLoading[variant - 1] = false;
+      // setLoadingForVariant(newLoading);
+    }
+  };
   const burn = async (tokenId: number) => {
     try {
       const contract = new ethers.Contract(
-        "0x7Bd8afD53eDfedAa6417C635083DEf53c5a03825",
+        "0x052c8eB7a8aDD3bA33a1A85F99464CdA88633FaC",
         abi,
         signer
       );
@@ -311,6 +328,7 @@ function NFT() {
             className="bg-black text-white text-center px-4 py-2 rounded-lg hover:scale-105 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
             type="button"
             disabled={account.status !== "connected"}
+            onClick={() => randomMint()}
           >
             Randomize
           </button>
